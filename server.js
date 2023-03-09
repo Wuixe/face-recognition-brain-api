@@ -1,6 +1,7 @@
 import express from "express";
+import bcrypt from "bcrypt";
 
-
+const saltRounds = 10;
 
 const app = express();
 
@@ -42,6 +43,11 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     const {email, name, password} = req.body;
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+        // Store hash in your password DB.
+        console.log(hash)
+    });
+    
     database.users.push({
         id: '125',
         name: name,
@@ -82,6 +88,13 @@ app.put('/image', (req, res) => {
             res.status(400).json('not found');
         }
 })
+
+
+
+
+// bcrypt.compare(myPlaintextPassword, hash, function(err, result) {
+//     // result == true
+// });
 
 app.listen(3000, () => {
     console.log('app is running on port 3000')
